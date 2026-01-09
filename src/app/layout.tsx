@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 import { ThemeProvider } from "@/components/theme-provider";
 import { ColorThemeProvider } from "@/context/ColorThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { PreferencesProvider } from "@/context/PreferencesContext";
 
 export default function RootLayout({
   children,
@@ -40,10 +41,12 @@ export default function RootLayout({
           enableSystem
         >
           <ColorThemeProvider>
-            <AuthProvider>
-              {children}
-              <Analytics />
-            </AuthProvider>
+            <PreferencesProvider>
+              <AuthProvider>
+                {children}
+                <Analytics />
+              </AuthProvider>
+            </PreferencesProvider>
           </ColorThemeProvider>
         </ThemeProvider>
       </body>
