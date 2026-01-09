@@ -1,0 +1,9 @@
+// Landing page components barrel export
+export { Navbar } from "./Navbar";
+export { HeroSection } from "./HeroSection";
+export { AboutSection } from "./AboutSection";
+export { VideoSection } from "./VideoSection";
+export { MobileAppSection } from "./MobileAppSection";
+export { TestimonialsSection } from "./TestimonialsSection";
+export { FAQSection } from "./FAQSection";
+export { FooterSection } from "./FooterSection";
