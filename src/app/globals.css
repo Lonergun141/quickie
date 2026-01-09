@@ -91,12 +91,142 @@
   --ring: #63A7FF;
 }
 
+/* Color Theme Overrides */
+/* Shadcn - Black & White */
+[data-color-theme="shadcn"] {
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --ring: #18181b;
+  --accent: #18181b;
+  --accent-foreground: #fafafa;
+  --highlight: #18181b;
+}
+
+[data-color-theme="shadcn"].dark,
+.dark[data-color-theme="shadcn"] {
+  --primary: #fafafa;
+  --primary-foreground: #18181b;
+  --ring: #fafafa;
+  --accent: #fafafa;
+  --accent-foreground: #18181b;
+  --highlight: #fafafa;
+}
+
+/* Twitter/X */
+[data-color-theme="twitter"] {
+  --primary: #1DA1F2;
+  --ring: #1DA1F2;
+  --accent: #1DA1F2;
+  --highlight: #14171A;
+}
+
+[data-color-theme="twitter"].dark,
+.dark[data-color-theme="twitter"] {
+  --primary: #1DA1F2;
+  --ring: #1DA1F2;
+  --accent: #1DA1F2;
+  --highlight: #1DA1F2;
+}
+
+/* Facebook */
+[data-color-theme="facebook"] {
+  --primary: #1877F2;
+  --ring: #1877F2;
+  --accent: #1877F2;
+  --highlight: #1877F2;
+}
+
+[data-color-theme="facebook"].dark,
+.dark[data-color-theme="facebook"] {
+  --primary: #1877F2;
+  --ring: #1877F2;
+  --accent: #1877F2;
+  --highlight: #1877F2;
+}
+
+/* Supabase */
+[data-color-theme="supabase"] {
+  --primary: #3ECF8E;
+  --ring: #3ECF8E;
+  --accent: #3ECF8E;
+  --highlight: #1C1C1C;
+}
+
+[data-color-theme="supabase"].dark,
+.dark[data-color-theme="supabase"] {
+  --primary: #3ECF8E;
+  --ring: #3ECF8E;
+  --accent: #3ECF8E;
+  --highlight: #3ECF8E;
+}
+
+/* Spotify */
+[data-color-theme="spotify"] {
+  --primary: #1DB954;
+  --ring: #1DB954;
+  --accent: #1DB954;
+  --highlight: #191414;
+}
+
+[data-color-theme="spotify"].dark,
+.dark[data-color-theme="spotify"] {
+  --primary: #1DB954;
+  --ring: #1DB954;
+  --accent: #1DB954;
+  --highlight: #1DB954;
+}
+
+/* GitHub */
+[data-color-theme="github"] {
+  --primary: #6e5494;
+  --ring: #6e5494;
+  --accent: #6e5494;
+  --highlight: #24292e;
+}
+
+[data-color-theme="github"].dark,
+.dark[data-color-theme="github"] {
+  --primary: #6e5494;
+  --ring: #6e5494;
+  --accent: #6e5494;
+  --highlight: #6e5494;
+}
+
+/* Discord */
+[data-color-theme="discord"] {
+  --primary: #5865F2;
+  --ring: #5865F2;
+  --accent: #5865F2;
+  --highlight: #36393f;
+}
+
+[data-color-theme="discord"].dark,
+.dark[data-color-theme="discord"] {
+  --primary: #5865F2;
+  --ring: #5865F2;
+  --accent: #5865F2;
+  --highlight: #5865F2;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Smooth theme transitions */
+  *,
+  *::before,
+  *::after {
+    transition-property: color, background-color, border-color, fill, stroke, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
   }
 }
