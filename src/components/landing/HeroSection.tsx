@@ -163,23 +163,38 @@ export function HeroSection() {
                     {/* Partner Logos */}
                     <motion.div
                         variants={fadeInUp}
-                        className="flex items-center justify-center gap-12 md:gap-20 mt-16"
+                        className="flex flex-col items-center gap-6 mt-16"
                     >
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                            <Image
-                                src="/images/openai.png"
-                                alt="OpenAI"
-                                width={28}
-                                height={28}
-                            />
-                            <span className="text-sm font-medium">OpenAI</span>
+                        <div className="flex items-center justify-center gap-12 md:gap-20">
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <Image
+                                    src="/images/openai.png"
+                                    alt="OpenAI"
+                                    width={28}
+                                    height={28}
+                                />
+                                <span className="text-sm font-medium">OpenAI</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <Image
+                                    src="/images/googlevision.png"
+                                    alt="Google Vision"
+                                    width={28}
+                                    height={28}
+                                />
+                                <span className="text-sm font-medium">Google Vision</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <Image
+                                    src="/images/convertapi.png"
+                                    alt="ConvertAPI"
+                                    width={28}
+                                    height={28}
+                                />
+                                <span className="text-sm font-medium">ConvertAPI</span>
+                            </div>
                         </div>
-                        <div className="flex items-center justify-center">
-                            <span className="text-primary font-bold text-lg">Google Vision</span>
-                        </div>
-                        <div className="flex items-center justify-center">
-                            <span className="text-primary font-bold text-lg">ConvertAPI</span>
-                        </div>
+                        <span className="text-xs font-semibold tracking-wide text-muted-foreground/50 uppercase">Powered by</span>
                     </motion.div>
                 </motion.div>
             </div>
