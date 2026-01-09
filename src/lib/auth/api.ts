@@ -153,4 +153,44 @@ export const authApi = {
 
         return data;
     },
+
+    /**
+     * Delete user account
+     */
+    async deleteAccount(password: string): Promise<MessageResponse> {
+        const response = await fetch("/api/auth/delete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ password }),
+            credentials: "include",
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || "Failed to delete account");
+        }
+
+        return data;
+    },
+
+    /**
+     * Get current user info
+     */
+    async getUser(): Promise<AuthResponse> {
+        const response = await fetch("/api/auth/me", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || "Failed to fetch user info");
+        }
+
+        return data;
+    }
 };

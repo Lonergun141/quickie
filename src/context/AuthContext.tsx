@@ -47,10 +47,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
             try {
                 // Try to refresh the token (will fail if no valid refresh token in cookies)
                 await authApi.refreshToken();
+                // If successful, fetch user data
+                const userResponse = await authApi.getUser();
+                setUser(userResponse.data.user);
                 setIsAuthenticated(true);
             } catch {
                 // Not authenticated - this is expected for new users
                 setIsAuthenticated(false);
+                setUser(null);
             } finally {
                 setIsLoading(false);
             }
