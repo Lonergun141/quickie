@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { ColorThemeProvider } from "@/context/ColorThemeContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootLayout({
   children,
@@ -39,8 +40,10 @@ export default function RootLayout({
           enableSystem
         >
           <ColorThemeProvider>
-            {children}
-            <Analytics />
+            <AuthProvider>
+              {children}
+              <Analytics />
+            </AuthProvider>
           </ColorThemeProvider>
         </ThemeProvider>
       </body>
