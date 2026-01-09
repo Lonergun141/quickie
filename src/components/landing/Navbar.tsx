@@ -258,13 +258,13 @@ export function Navbar() {
                 {/* Desktop Navigation */}
                 <div className="hidden sm:flex items-center gap-3">
                     <Link
-                        href="/auth/signin"
+                        href="/login"
                         className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                     >
                         Sign in
                     </Link>
                     <Link
-                        href="/auth/signup"
+                        href="/register"
                         className="bg-primary text-primary-foreground px-5 py-2 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors"
                     >
                         Sign up
@@ -306,14 +306,14 @@ export function Navbar() {
                     >
                         <div className="flex flex-col gap-3">
                             <Link
-                                href="/auth/signin"
+                                href="/login"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
                             >
                                 Sign in
                             </Link>
                             <Link
-                                href="/auth/signup"
+                                href="/register"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className="bg-primary text-primary-foreground px-5 py-3 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors text-center"
                             >
