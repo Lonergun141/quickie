@@ -7,6 +7,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { cn } from "@/lib/utils";
 import { useNoteDetail } from "@/hooks/useNoteDetail";
 import { Loader2, AlertCircle } from "lucide-react";
+import { PomodoroMiniTimer } from "@/components/Pomodoro/PomodoroMiniTimer";
 
 // Note components
 import { NoteHeader } from "@/components/notes/NoteHeader";
@@ -15,6 +16,7 @@ import { StudyToolsBar } from "@/components/notes/StudyToolsBar";
 import { NoteContent } from "@/components/notes/NoteContent";
 import { GenerateModal } from "@/components/notes/GenerateModal";
 import { UnsavedChangesModal } from "@/components/notes/UnsavedChangesModal";
+import { FullPageLoader } from "@/components/ui/FullPageLoader";
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -24,6 +26,7 @@ export default function NoteDetailPage({ params }: PageProps) {
     const { id } = use(params);
     const router = useRouter();
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
+    const [isZenMode, setIsZenMode] = useState(false);
 
     const {
         note,
@@ -199,28 +202,44 @@ export default function NoteDetailPage({ params }: PageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
-            <Sidebar onToggle={setSidebarExpanded} onNavigate={handleSidebarNavigation} />
+        <div className="min-h-screen bg-background text-foreground relative">
+            {/* Sidebar - Hidden in Zen Mode */}
+            <div className={cn(
+                "transition-all duration-500 ease-in-out absolute left-0 top-0 h-full z-30",
+                isZenMode ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"
+            )}>
+                <Sidebar onToggle={setSidebarExpanded} onNavigate={handleSidebarNavigation} />
+            </div>
 
             <main className={cn(
-                "transition-all duration-300 min-h-screen",
-                sidebarExpanded ? "lg:ml-64" : "lg:ml-20"
+                "transition-all duration-500 ease-in-out min-h-screen",
+                isZenMode ? "ml-0" : (sidebarExpanded ? "lg:ml-64" : "lg:ml-20")
             )}>
+                {isZenMode && (
+                    <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden xl:block">
+                        <PomodoroMiniTimer isCollapsed={false} disableAutoOpen={true} />
+                    </div>
+                )}
                 <NoteHeader
                     isEditing={isEditing}
                     onBack={handleBack}
                     onEdit={startEditing}
                     onCancel={handleCancel}
                     onSave={handleSave}
+                    isZenMode={isZenMode}
+                    onToggleZenMode={() => setIsZenMode(!isZenMode)}
                 />
 
                 {/* Main Content */}
-                <div className="max-w-4xl mx-auto px-6 py-10 overflow-x-hidden">
+                <div className={cn(
+                    "mx-auto px-6 py-10 overflow-x-hidden transition-all duration-500 ease-in-out",
+                    isZenMode ? "max-w-3xl" : "max-w-4xl"
+                )}>
                     <motion.article
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="space-y-10"
+                        className={cn("space-y-10", isZenMode && "py-12")}
                     >
                         <NoteTitleSection
                             title={note.notetitle}
@@ -263,6 +282,12 @@ export default function NoteDetailPage({ params }: PageProps) {
                 isOpen={showUnsavedModal}
                 onClose={() => setShowUnsavedModal(false)}
                 onConfirm={handleUnsavedConfirm}
+            />
+
+            <FullPageLoader
+                isLoading={isGeneratingFlashcards || isGeneratingQuiz}
+                text={isGeneratingFlashcards ? "Generating Flashcards..." : "Creating Quiz..."}
+                subtext={isGeneratingFlashcards ? "Analyzing your note and creating cards..." : "Crafting challenging questions..."}
             />
         </div>
     );

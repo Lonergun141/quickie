@@ -32,10 +32,6 @@ export function FlashcardsHeader({
         >
             {/* Title Section */}
             <div className="space-y-1">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-2 w-fit">
-                    <Copy className="w-3 h-3" />
-                    <span>Study Sets</span>
-                </div>
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">
                     Flashcards
                 </h1>
@@ -56,7 +52,7 @@ export function FlashcardsHeader({
                         placeholder="Search sets..."
                         value={searchTerm}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        className="block w-full pl-10 pr-3 py-3 border border-stone-200 dark:border-stone-800 rounded-xl leading-5 bg-white/50 dark:bg-zinc-900/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all shadow-sm"
+                        className="block w-full pl-10 pr-3 py-3 border border-stone-200 dark:border-stone-800 rounded-xl leading-5 bg-white/50 dark:bg-zinc-900/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all"
                     />
                 </div>
 
@@ -66,7 +62,7 @@ export function FlashcardsHeader({
                         <select
                             value={dateFilter}
                             onChange={(e) => onDateFilterChange(e.target.value as DateFilter)}
-                            className="appearance-none w-full px-4 py-3 pl-10 bg-white/50 dark:bg-zinc-900/50 border border-stone-200 dark:border-stone-800 rounded-xl text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all shadow-sm font-medium"
+                            className="appearance-none w-full px-4 py-3 pl-10 bg-white/50 dark:bg-zinc-900/50 border border-stone-200 dark:border-stone-800 rounded-xl text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all font-medium"
                         >
                             <option value="all">All Time</option>
                             <option value="week">Last 7 Days</option>
@@ -84,7 +80,7 @@ export function FlashcardsHeader({
                         <select
                             value={sortOption}
                             onChange={(e) => onSortChange(e.target.value)}
-                            className="appearance-none w-full px-4 py-3 pl-10 bg-white/50 dark:bg-zinc-900/50 border border-stone-200 dark:border-stone-800 rounded-xl text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all shadow-sm font-medium"
+                            className="appearance-none w-full px-4 py-3 pl-10 bg-white/50 dark:bg-zinc-900/50 border border-stone-200 dark:border-stone-800 rounded-xl text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all font-medium"
                         >
                             <option value="dateDesc">Newest First</option>
                             <option value="dateAsc">Oldest First</option>

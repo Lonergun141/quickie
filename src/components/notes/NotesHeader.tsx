@@ -26,20 +26,12 @@ export function NotesHeader({
         <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/60 dark:bg-zinc-950/40 backdrop-blur-xl border border-stone-200 dark:border-stone-800 rounded-3xl p-6 lg:p-8 shadow-sm"
+            className="bg-white/60 dark:bg-zinc-950/40 backdrop-blur-xl border border-stone-200 dark:border-stone-800 rounded-3xl p-6 lg:p-8"
         >
             <div className="flex flex-col lg:flex-row lg:items-center gap-6 justify-between">
                 {/* Title Section */}
                 <div className="flex-1 space-y-2">
-                    <motion.div
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="inline-flex items-center gap-2 text-primary bg-primary/10 px-3 py-1 rounded-full w-fit"
-                    >
-                        <FileText className="w-4 h-4" />
-                        <span className="text-xs font-semibold uppercase tracking-wider">Your Knowledge Base</span>
-                    </motion.div>
+
                     <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
                         Summary Notes
                     </h1>
