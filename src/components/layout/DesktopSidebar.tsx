@@ -5,6 +5,7 @@ import { ChevronLeft, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SidebarLogo } from "./SidebarLogo";
 import { SidebarNav, NavItem } from "./SidebarNav";
+import { PomodoroMiniTimer } from "@/components/Pomodoro/PomodoroMiniTimer";
 
 interface DesktopSidebarProps {
     isCollapsed: boolean;
@@ -29,9 +30,9 @@ export function DesktopSidebar({ isCollapsed, onToggle, menuItems, onNavigate, o
             transition={{ type: "spring", stiffness: 200, damping: 25 }}
             className={cn(
                 "fixed top-4 left-4 h-[calc(100vh-2rem)] z-50",
-                "bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl",
-                "border border-stone-200 dark:border-stone-800 rounded-3xl",
-                "flex flex-col overflow-hidden"
+                "bg-card dark:bg-zinc-900/40 backdrop-blur-2xl",
+                "border border-zinc-200 dark:border-white/5 rounded-3xl",
+                "flex flex-col overflow-hidden shadow-2xl shadow-black/5 dark:shadow-black/20"
             )}
         >
             {/* Header */}
@@ -49,7 +50,7 @@ export function DesktopSidebar({ isCollapsed, onToggle, menuItems, onNavigate, o
                 </button>
             </div>
 
-            <div className="flex-1 px-3 py-4 overflow-y-auto overflow-x-hidden scrollbar-none">
+            <div className="flex-1 px-3 py-4 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-white/10">
                 <SidebarNav
                     items={menuItems}
                     onNavigate={onNavigate}
@@ -60,12 +61,13 @@ export function DesktopSidebar({ isCollapsed, onToggle, menuItems, onNavigate, o
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-black/5 dark:border-white/5 bg-black/5 dark:bg-white/5">
+            <div className="p-4 border-t border-zinc-200 dark:border-white/5 bg-zinc-100/50 dark:bg-white/5 flex flex-col gap-2">
+                <PomodoroMiniTimer isCollapsed={isCollapsed} />
                 <button
                     onClick={onLogout}
                     className={cn(
                         "flex items-center justify-center rounded-xl p-3 transition-all duration-200",
-                        "text-muted-foreground hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20",
+                        "text-zinc-600 dark:text-zinc-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400",
                         !isCollapsed ? "w-full gap-3" : "w-10 h-10 mx-auto"
                     )}
                     title={t('sidebar.logout')}

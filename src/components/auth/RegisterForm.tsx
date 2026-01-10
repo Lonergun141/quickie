@@ -99,7 +99,7 @@ export function RegisterForm() {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="auth-form" noValidate>
+            <form onSubmit={handleSubmit} className="auth-form space-y-5" noValidate>
                 {errors.form && (
                     <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -111,7 +111,7 @@ export function RegisterForm() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-5">
                     <AuthInput
                         id="firstname"
                         label="First Name"
@@ -186,7 +186,7 @@ export function RegisterForm() {
                     autoComplete="new-password"
                 />
 
-                <div className="space-y-2">
+                <div className="space-y-2 py-5">
                     <div className="flex items-start gap-3">
                         <div className="relative flex items-center">
                             <input
@@ -219,7 +219,7 @@ export function RegisterForm() {
                     Create Account
                 </AuthButton>
 
-                <div className="text-center">
+                <div className="text-center py-5">
                     <p className="text-sm text-muted-foreground">
                         Already have an account?{" "}
                         <Link href="/login" className="font-semibold text-primary hover:underline">

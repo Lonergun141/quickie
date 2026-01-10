@@ -24,6 +24,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ColorThemeProvider } from "@/context/ColorThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { PreferencesProvider } from "@/context/PreferencesContext";
+import { PomodoroTimerProvider } from "@/context/PomodoroTimerContext";
+
+import { ToastProvider } from "@/context/ToastContext";
 
 export default function RootLayout({
   children,
@@ -42,10 +45,14 @@ export default function RootLayout({
         >
           <ColorThemeProvider>
             <PreferencesProvider>
-              <AuthProvider>
-                {children}
-                <Analytics />
-              </AuthProvider>
+              <ToastProvider>
+                <AuthProvider>
+                  <PomodoroTimerProvider>
+                    {children}
+                    <Analytics />
+                  </PomodoroTimerProvider>
+                </AuthProvider>
+              </ToastProvider>
             </PreferencesProvider>
           </ColorThemeProvider>
         </ThemeProvider>

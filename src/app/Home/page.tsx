@@ -17,6 +17,8 @@ import { HomeTabs, TabType } from "@/components/home/HomeTabs";
 import { TextInputSection } from "@/components/home/TextInputSection";
 import { FileUploadSection } from "@/components/home/FileUploadSection";
 import { Tooltip } from "@/components/ui/tooltip";
+import { useToast } from "@/context/ToastContext";
+import { FullPageLoader } from "@/components/ui/FullPageLoader";
 
 // Services & Utils
 import { services } from "@/lib/api/services";
@@ -44,6 +46,7 @@ export default function HomePage() {
     const router = useRouter();
     const { user } = useAuth();
     const { theme } = useTheme();
+    const { toast } = useToast();
 
     const characterCount = inputText.length;
     const wordCount = inputText.split(/\s+/).filter(Boolean).length;
@@ -86,83 +89,90 @@ export default function HomePage() {
     };
 
     const handleGenerate = async () => {
+        if (!user?.id) {
+            toast.error("You must be logged in to generate summaries.");
+            return;
+        }
+
         setIsLoading(true);
         try {
             if (activeTab === "text") {
                 if (wordCount < 10) {
-                    setModal({ isOpen: true, title: "Insufficient Content", message: "Please enter at least 10 words.", type: "warning" });
+                    toast.warning("Please enter at least 10 words to generate a summary.");
                     setIsLoading(false);
                     return;
                 }
-                const response = await services.generateSummary(inputText);
+                const response = await services.generateSummary(inputText, user.id);
                 if (response?.id) router.push(`/Notes/${response.id}`);
 
             } else if (activeTab === "images") {
                 if (uploadedImages.length === 0) {
-                    setModal({ isOpen: true, title: "No Images", message: "Please upload at least one image.", type: "warning" });
+                    toast.warning("Please upload at least one image.");
                     setIsLoading(false);
                     return;
                 }
                 const extractedText = await services.extractTextFromImages(uploadedImages);
-                const response = await services.generateSummary(extractedText);
+                const response = await services.generateSummary(extractedText, user.id);
                 if (response?.id) router.push(`/Notes/${response.id}`);
 
             } else if (activeTab === "documents") {
                 if (uploadedDocuments.length === 0) {
-                    setModal({ isOpen: true, title: "No Documents", message: "Please upload at least one document.", type: "warning" });
+                    toast.warning("Please upload at least one document.");
                     setIsLoading(false);
                     return;
                 }
                 const textResults = await Promise.all(uploadedDocuments.map(doc => services.extractTextFromDocument(doc)));
                 const combinedText = textResults.join("\n\n---\n\n");
-                const response = await services.generateSummary(combinedText);
+                const response = await services.generateSummary(combinedText, user.id);
                 if (response?.id) router.push(`/Notes/${response.id}`);
             }
         } catch (error: any) {
             console.error("Generation Error:", error);
-            setModal({ isOpen: true, title: "Error", message: error.message || "An unexpected error occurred.", type: "error" });
+            toast.error(error.message || "An unexpected error occurred.");
+            // Optional: Still show modal for very complex errors if desired, but toast is usually enough
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="flex flex-col lg:flex-row min-h-screen bg-background w-full text-foreground selection:bg-primary/20 overflow-hidden">
+        <div className="flex flex-col lg:flex-row min-h-screen bg-background w-full text-foreground selection:bg-foreground/10 overflow-hidden font-sans">
             <Sidebar onToggle={handleSidebarToggle} />
 
             <main className={cn(
                 "transition-all duration-300 flex-grow relative min-h-screen lg:h-screen lg:overflow-hidden",
                 isSidebarExpanded ? "lg:ml-64" : "lg:ml-20"
             )}>
-                {/* Background Ambient */}
-                <div className="absolute inset-0 pointer-events-none -z-10">
-                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen opacity-50" />
-                    <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen opacity-50" />
+                {/* Cinematic Background Ambience - Adapts to Mode */}
+                <div className="absolute inset-0 pointer-events-none -z-10 bg-background transition-colors duration-500">
+                    <div className="absolute top-0 right-0 w-[80vh] h-[80vh] bg-zinc-900/5 dark:bg-zinc-900/50 rounded-full blur-[150px] dark:mix-blend-screen opacity-40 transition-all duration-500" />
+                    <div className="absolute bottom-0 left-[10%] w-[60vh] h-[60vh] bg-zinc-100/50 dark:bg-white/5 rounded-full blur-[120px] dark:mix-blend-screen opacity-20 transition-all duration-500" />
                 </div>
 
-                {/* Grid Layout - Bento Style (Compact & Spacious) */}
-                <div className="h-auto lg:h-[calc(100vh-32px)] w-full max-w-[1920px] mx-auto p-4 lg:p-4 lg:pl-10 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:items-stretch overflow-visible lg:overflow-hidden">
+                {/* Grid Layout */}
+                <div className="h-auto lg:h-[calc(100vh)] w-full max-w-[1920px] mx-auto p-4 lg:p-6 lg:pl-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:items-stretch overflow-visible lg:overflow-hidden">
 
                     {/* Left Column (Navigation & Greeting) */}
-                    <div className="lg:col-span-4 flex flex-col gap-5 h-full">
+                    <div className="lg:col-span-4 flex flex-col gap-6 h-full py-2">
 
                         {/* Greeting Card */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-white/60 dark:bg-zinc-950/40 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl p-6 flex-shrink-0"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-8 flex-shrink-0 shadow-2xl shadow-black/5 dark:shadow-black/20 overflow-hidden relative"
                         >
                             <QuickieGreetings />
                         </motion.div>
 
                         {/* Guide Card */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="bg-white/60 dark:bg-zinc-950/40 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl p-0 flex-grow overflow-hidden relative hidden lg:block"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.1, duration: 0.5, ease: "easeOut" }}
+                            className="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-0 flex-grow overflow-hidden relative hidden lg:block shadow-2xl shadow-black/5 dark:shadow-black/20"
                         >
-                            <div className="absolute inset-0 overflow-y-auto p-6">
+                            <div className="absolute inset-0 overflow-y-auto p-8">
                                 <ContextualGuide activeTab={activeTab} />
                             </div>
                         </motion.div>
@@ -172,25 +182,22 @@ export default function HomePage() {
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="lg:col-span-8 h-full"
+                        transition={{ delay: 0.2, duration: 0.6, ease: "backOut" }}
+                        className="lg:col-span-8 h-full py-2"
                     >
-                        <div className="bg-white/60 dark:bg-zinc-950/40 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl h-full flex flex-col overflow-hidden relative">
-
-                            {/* Card Glow - Reduced Opacity */}
-                            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
+                        <div className="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl h-full flex flex-col overflow-hidden relative shadow-2xl shadow-black/5 dark:shadow-black/40 text-foreground">
 
                             {/* Header */}
-                            <div className="flex-shrink-0 p-5 px-6 border-b border-black/5 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div className="flex-shrink-0 p-6 px-8 border-b border-zinc-200 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div>
-                                    <h2 className="text-lg font-semibold tracking-tight">Quickie</h2>
-                                    <p className="text-xs text-muted-foreground mt-0.5">Start studying now.</p>
+                                    <h2 className="text-xl font-bold tracking-tight text-foreground mb-1">STUDIO</h2>
+                                    <p className="text-xs text-muted-foreground font-medium tracking-wide uppercase">Input Capture</p>
                                 </div>
                                 <HomeTabs activeTab={activeTab} onTabChange={setActiveTab} />
                             </div>
 
                             {/* Content Area - Scrollable */}
-                            <div className="flex-grow overflow-y-auto p-6 relative">
+                            <div className="flex-grow overflow-y-auto p-8 relative">
                                 <AnimatePresence mode="wait">
                                     <motion.div
                                         key={activeTab}
@@ -223,20 +230,23 @@ export default function HomePage() {
                             </div>
 
                             {/* Footer / Actions */}
-                            <div className="flex-shrink-0 p-5 px-6 bg-gradient-to-t from-white/50 to-transparent dark:from-zinc-950/50 flex justify-end">
-                                <Tooltip content="Process your content to create summaries, flashcards, and quizzes" side="left">
-                                    <div className="inline-block"> {/* Wrapper needed because Tooltip needs a ref or element, and AuthButton might be complex */}
+                            <div className="flex-shrink-0 p-6 px-8 border-t border-zinc-200 dark:border-white/5 bg-zinc-50/50 dark:bg-zinc-950/20 flex justify-end items-center gap-4">
+                                <div className="text-xs text-muted-foreground tracking-widest hidden md:block">
+                                    SYSTEM READY
+                                </div>
+                                <Tooltip content="Click this button to generate summary notes" side="left">
+                                    <div className="inline-block"> {/* Wrapper needed */}
                                         <AuthButton
                                             onClick={handleGenerate}
                                             isLoading={isLoading}
-                                            loadingText="Processing..."
+                                            loadingText="PROCESSING..."
                                             disabled={
                                                 (activeTab === "text" && wordCount < 10) ||
                                                 (activeTab !== "text" && filesToDisplay.length === 0)
                                             }
-                                            className="rounded-xl px-6 py-2.5 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                            className="rounded-lg px-8 py-3 text-xs font-bold tracking-widest uppercase bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-black/10 dark:shadow-white/5 transition-all hover:scale-[1.02] active:scale-[0.98]"
                                         >
-                                            Generate Quickie
+                                            Create Summary Notes
                                         </AuthButton>
                                     </div>
                                 </Tooltip>
@@ -252,6 +262,12 @@ export default function HomePage() {
                 title={modal.title}
                 message={modal.message}
                 type={modal.type}
+            />
+
+            <FullPageLoader
+                isLoading={isLoading}
+                text="Generating Summary..."
+                subtext="Analyzing your content and extracting key insights..."
             />
         </div>
     );

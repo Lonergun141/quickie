@@ -16,7 +16,7 @@ export default function SettingsPage() {
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
     const { colorTheme, setColorTheme } = useColorTheme();
-    const { language, setLanguage, fontSize, setFontSize, t } = usePreferences();
+    const { language, setLanguage, fontSize, setFontSize, fontFamily, setFontFamily, t } = usePreferences();
     const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
     const [isDeactivateModalOpen, setDeactivateModalOpen] = useState(false);
 
@@ -41,7 +41,7 @@ export default function SettingsPage() {
                 <div className="max-w-6xl mx-auto h-full flex flex-col gap-6">
                     {/* Header */}
                     <div className="flex flex-col gap-2 pt-4">
-                        <h1 className="text-3xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-incompleeta)' }}>
+                        <h1 className="text-3xl font-bold tracking-tight">
                             {t('settings.title')}
                         </h1>
                         <p className="text-muted-foreground">
@@ -250,6 +250,36 @@ export default function SettingsPage() {
                                         ))}
                                     </div>
                                     <p className="text-xs text-muted-foreground">{t('settings.fontSizeDesc')}</p>
+                                </div>
+
+                                {/* Font Family */}
+                                <div className="space-y-3">
+                                    <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                                        <Type size={16} className="text-muted-foreground" />
+                                        {t('settings.fontFamily')}
+                                    </label>
+                                    <div className="flex items-center gap-3 p-1.5 bg-white/50 dark:bg-zinc-900/50 border border-stone-200 dark:border-stone-800 rounded-xl">
+                                        {(['sans', 'mono'] as const).map((font) => (
+                                            <button
+                                                key={font}
+                                                onClick={() => setFontFamily(font)}
+                                                className={cn(
+                                                    "flex-1 flex items-center justify-center py-2 rounded-lg transition-all",
+                                                    fontFamily === font
+                                                        ? "bg-white dark:bg-zinc-800 shadow-sm text-foreground ring-1 ring-black/5 dark:ring-white/5"
+                                                        : "text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5"
+                                                )}
+                                            >
+                                                <span className={cn(
+                                                    "font-medium text-sm",
+                                                    font === 'mono' && "font-mono"
+                                                )}>
+                                                    {font === 'sans' ? 'Default' : 'Mono'}
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">{t('settings.fontFamilyDesc')}</p>
                                 </div>
                             </div>
                         </motion.div>

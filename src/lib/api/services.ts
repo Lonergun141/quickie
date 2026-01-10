@@ -72,19 +72,15 @@ export const services = {
     /**
      * Generate summary from text
      */
-    async generateSummary(text: string): Promise<SummaryResponse> {
-        // This should probably call your Python backend directly via proxy 
-        // OR a new Next.js route if you want to hide the backend URL.
-        // For now, assuming direct backend call via authApi proxy pattern or similar.
-        // Based on legacy `openAiServices.js`: `axiosInstance.post('/usernotes/', formData)`
-
-        // Let's create a proxy for this too in `/api/summary` to keep API keys/URLs hidden if needed,
-        // or just use the pattern established in `auth/api.ts` (Next.js route -> External Backend)
-
-        const response = await fetch("/api/summary", {
+    async generateSummary(text: string, userId: string | number): Promise<SummaryResponse> {
+        // Use the proxy route
+        const response = await fetch("/api/proxy/user-notes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ notecontents: text }),
+            body: JSON.stringify({
+                notecontents: text,
+                user: userId
+            }),
         });
 
         if (!response.ok) {
