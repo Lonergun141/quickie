@@ -124,7 +124,7 @@ export function LoginForm() {
                 />
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end py-5">
                 <Link
                     href="/forgot-password"
                     className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
@@ -145,7 +145,7 @@ export function LoginForm() {
                 }
             </AuthButton>
 
-            <div className="text-center">
+            <div className="text-center py-5">
                 <p className="text-sm text-muted-foreground">
                     Don't have an account?{" "}
                     <Link href="/register" className="font-semibold text-primary hover:underline">
